@@ -210,65 +210,57 @@
     </choose>
   </macro>
   <macro name="access">
-    <choose>
-      <if type="webpage post post-weblog" match="any">
-        <!-- https://url.com/ (accessed Mon. DD, YYYY). -->
-        <choose>
-          <if variable="URL">
-            <group delimiter=". " prefix=" ">
-              <group delimiter=": ">
-                <text term="accessed" text-case="capitalize-first"/>
-                <date variable="accessed" form="text"/>
-              </group>
-              <text term="online" prefix="[" suffix="]" text-case="capitalize-first"/>
-              <group delimiter=": ">
-                <text term="available at" text-case="capitalize-first"/>
-                <text variable="URL"/>
-              </group>
-            </group>
-          </if>
-        </choose>
-      </if>
-      <group>
-        <choose>
-          <if variable="DOI">
-            <text macro="doi-link"/>
-          </if>
-        </choose>
-      </group>
-      <else-if variable="URL">
-        <!-- Accessed: Mon. DD, YYYY. [Medium]. Available: https://URL.com/ -->
-        <group delimiter=". " prefix=" " suffix=". ">
-          <!-- Accessed: Mon. DD, YYYY. -->
-          <group delimiter=": ">
-            <text term="accessed" text-case="capitalize-first"/>
-            <date variable="accessed" form="text"/>
-          </group>
-          <!-- [Online Video]. -->
-          <group prefix="[" suffix="]" delimiter=" ">
-            <choose>
-              <if variable="medium" match="any">
-                <text variable="medium" text-case="capitalize-first"/>
-              </if>
-              <else>
-                <text term="online" text-case="capitalize-first"/>
-                <choose>
-                  <if type="motion_picture">
-                    <text term="video" text-case="capitalize-first"/>
-                  </if>
-                </choose>
-              </else>
-            </choose>
-          </group>
+  <choose>
+    <!-- Webpage, post, weblog -->
+    <if type="webpage post post-weblog" match="any">
+      <group delimiter=". " prefix=" " suffix=".">
+        <group delimiter=": ">
+          <text term="accessed" text-case="capitalize-first"/>
+          <date variable="accessed" form="text"/>
         </group>
-        <!-- Available: https://URL.com/ -->
+        <text term="online" prefix="[" suffix="]" text-case="capitalize-first"/>
+        <group delimiter=": ">
+          <text term="available at" text-case="capitalize-first"/>
+          <text variable="URL"/>
+        </group>
+      </group>
+    </if>
+
+    <!-- DOI -->
+    <else-if variable="DOI">
+      <text macro="doi-link"/>
+    </else-if>
+
+    <!-- Other URLs -->
+    <else-if variable="URL">
+      <group delimiter=". " prefix=" " suffix=". ">
+        <group delimiter=": ">
+          <text term="accessed" text-case="capitalize-first"/>
+          <date variable="accessed" form="text"/>
+        </group>
+        <group prefix="[" suffix="]" delimiter=" ">
+          <choose>
+            <if variable="medium" match="any">
+              <text variable="medium" text-case="capitalize-first"/>
+            </if>
+            <else>
+              <text term="online" text-case="capitalize-first"/>
+              <choose>
+                <if type="motion_picture">
+                  <text term="video" text-case="capitalize-first"/>
+                </if>
+              </choose>
+            </else>
+          </choose>
+        </group>
         <group delimiter=": " prefix=" ">
           <text term="available at" text-case="capitalize-first"/>
           <text variable="URL"/>
         </group>
-      </else-if>
-    </choose>
-  </macro>
+      </group>
+    </else-if>
+  </choose>
+</macro>
   <macro name="doi-link">
     <group delimiter="" suffix=".">
       <text variable="DOI" prefix="doi: " link="https://doi.org/"/>
