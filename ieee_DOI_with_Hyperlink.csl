@@ -229,9 +229,10 @@
           </if>
         </choose>
       </if>
-      <else-if match="any" variable="DOI">
-        <!-- doi: 10.1000/xyz123. -->
-        <text variable="DOI" prefix=" DOI: " suffix="." link="https://doi.org/"/>
+      <else-if variable="DOI">
+        <group delimiter=". " suffix=".">
+          <text macro="doi-link"/>
+        </group>
       </else-if>
       <else-if variable="URL">
         <!-- Accessed: Mon. DD, YYYY. [Medium]. Available: https://URL.com/ -->
@@ -320,6 +321,9 @@
         </group>
       </if>
     </choose>
+  </macro>
+  <macro name="doi-link">
+    <text variable="DOI" prefix="doi: " link="https://doi.org/"/>
   </macro>
   <!-- Citation -->
   <citation>
